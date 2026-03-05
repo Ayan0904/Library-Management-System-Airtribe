@@ -27,4 +27,13 @@ public class InventoryService {
     public List<BookItem> getAllCopies(String isbn) {
         return inventory.getOrDefault(isbn, List.of());
     }
+
+    public void removeBookCopy(BookItem bookItem) {
+
+        List<BookItem> copies = inventory.get(bookItem.getBook().getIsbn());
+
+        if (copies != null) {
+            copies.remove(bookItem);
+        }
+    }
 }
