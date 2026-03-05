@@ -3,17 +3,6 @@
 ## Overview
 
 This project implements a **Library Management System in Java** designed to help librarians manage books, patrons, and lending processes efficiently.
-
-The system demonstrates strong usage of:
-
-- Object-Oriented Programming (OOP)
-- SOLID Design Principles
-- Design Patterns
-- Java Collections
-- Logging using `java.util.logging`
-
-The implementation focuses on clean architecture and maintainable code rather than persistence or external APIs.
-
 ---
 
 # Features
