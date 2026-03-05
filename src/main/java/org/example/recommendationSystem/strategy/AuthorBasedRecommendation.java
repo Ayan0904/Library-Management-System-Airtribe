@@ -1,4 +1,4 @@
-package org.example.recommendationSystem;
+package org.example.recommendationSystem.strategy;
 
 import org.example.model.Book;
 import org.example.model.Patron;

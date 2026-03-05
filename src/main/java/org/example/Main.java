@@ -1,13 +1,15 @@
 package org.example;
+import org.example.CustomException.BookNotAvailableException;
+import org.example.config.LoggerConfig;
 import org.example.model.Book;
 import org.example.model.BookItem;
 import org.example.model.Loan;
 import org.example.model.Patron;
 import org.example.multiBranchSystem.BranchService;
 import org.example.multiBranchSystem.LibraryBranch;
-import org.example.recommendationSystem.HistoryBasedRecommendation;
+import org.example.recommendationSystem.strategy.HistoryBasedRecommendation;
 import org.example.recommendationSystem.RecommendationService;
-import org.example.recommendationSystem.RecommendationStrategy;
+import org.example.recommendationSystem.strategy.RecommendationStrategy;
 import org.example.reservationSystem.ReservationService;
 import org.example.service.LendingService;
 
@@ -20,6 +22,8 @@ public class Main {
             Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
+
+        LoggerConfig.setupLogger();
 
         logger.info("===== Library Management System Demo =====");
 
@@ -81,18 +85,28 @@ public class Main {
 
         LendingService lendingService = new LendingService();
 
-        Loan loan = lendingService.checkoutBook(item1, patron);
+        try {
+
+            Loan loan = lendingService.checkoutBook(item1, patron);
+
+            /*
+             * STEP 7 — Return Book
+             */
+
+            lendingService.returnBook(loan);
+
+            logger.info("Book returned: " + item1.getBook().getTitle());
+
+
+        } catch (BookNotAvailableException e) {
+
+            logger.severe("Checkout failed: " + e.getMessage());
+
+        }
 
         logger.info("Book borrowed: " + item1.getBook().getTitle());
 
 
-        /*
-         * STEP 7 — Return Book
-         */
-
-        lendingService.returnBook(loan);
-
-        logger.info("Book returned: " + item1.getBook().getTitle());
 
 
         /*
