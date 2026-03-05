@@ -158,3 +158,115 @@ When a book is returned, all registered observers (patrons with reservations) ar
 Used in the `recommendation system`.
 
 Different recommendation algorithms can be swapped dynamically.
+
+
+
+## Class Diagram
+
+```mermaid
+classDiagram
+
+class Book {
+    -String title
+    -String author
+    -String isbn
+    -int publicationYear
+}
+
+class BookItem {
+    -String barcode
+    -BookStatus status
+    +borrow()
+    +returnBook()
+}
+
+class Patron {
+    -String id
+    -String name
+    -List~Loan~ borrowingHistory
+}
+
+class Loan {
+    -BookItem bookItem
+    -Patron patron
+    -LocalDate checkoutDate
+    -LocalDate returnDate
+}
+
+class InventoryService {
+    +addBookCopy()
+    +removeBookCopy()
+    +getAvailableCopies()
+}
+
+class LendingService {
+    +checkoutBook()
+    +returnBook()
+}
+
+class SearchService {
+    +searchByTitle()
+    +searchByAuthor()
+    +searchByIsbn()
+}
+
+class LibraryBranch {
+    -String branchId
+    -String name
+    -InventoryService inventoryService
+}
+
+class BranchService {
+    +transferBook()
+}
+
+class ReservationService {
+    +reserveBook()
+    +bookReturned()
+}
+
+class Observer {
+    <<interface>>
+    +update()
+}
+
+class Reservation {
+    +update()
+}
+
+class BookAvailabilityNotifier {
+    +addObserver()
+    +notifyObservers()
+}
+
+class RecommendationStrategy {
+    <<interface>>
+    +recommend()
+}
+
+class HistoryBasedRecommendation {
+    +recommend()
+}
+
+class AuthorBasedRecommendation {
+    +recommend()
+}
+
+class RecommendationService {
+    +recommendBooks()
+}
+
+Book "1" --> "many" BookItem
+BookItem --> Loan
+Patron --> Loan
+LibraryBranch --> InventoryService
+BranchService --> LibraryBranch
+InventoryService --> BookItem
+LendingService --> Loan
+Reservation ..|> Observer
+BookAvailabilityNotifier --> Observer
+ReservationService --> BookAvailabilityNotifier
+RecommendationStrategy <|.. HistoryBasedRecommendation
+RecommendationStrategy <|.. AuthorBasedRecommendation
+RecommendationService --> RecommendationStrategy
+```
